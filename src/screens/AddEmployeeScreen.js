@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 // import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { addEmployee } from "../redux/reducers/EmployeeReducer";
 import state from '../data/data.json'
 import { useDispatch } from "react-redux";
+import Modal from "hrnet-modal-micka-dev";
 
 export const AddEmployeeScreen = () => {
-
+    const [isVisible, setIsVisible] = useState(false);
     const [employee, setEmployee] = useState({
         firstName: "",
         lastName: "",
@@ -22,17 +23,26 @@ export const AddEmployeeScreen = () => {
     const dispatch = useDispatch();
 
     const saveEmployee = (event) => {
-        dispatch(addEmployee(employee))
+        let error = false;
+        for (const [key, value] of Object.entries(employee)) {
+            if (!value) {
+                error = true;
+                document.getElementById(key).style.borderColor = "red";
+            } else {
+                document.getElementById(key).style.borderColor = "";
+            }
+        }
+
+        if (!error) {
+            setIsVisible(true);
+            dispatch(addEmployee(employee))
+        }
+
     }
 
     const handleInputChange = (event) => {
         setEmployee({ ...employee, [event.target.id]: event.target.value });
     }
-
-    // useEffect(() => {
-    //   console.log(employee);
-    // }, [employee])
-    
 
     return (
         <div>
@@ -40,12 +50,12 @@ export const AddEmployeeScreen = () => {
                 <h1>HRnet</h1>
             </div>
             <div className="container">
-                <a href="employee-list.html">View Current Employees</a>
+                <NavLink to="/list">View Current Employees</NavLink>
                 <h2>Create Employee</h2>
                 <form onSubmit={saveEmployee} id="create-employee">
                     <div className="input-group mb-3">
                         <span className="input-group-text">First Name</span>
-                        <input onChange={handleInputChange}  type="text" className="form-control" id="firstName" />
+                        <input onChange={handleInputChange} type="text" className="form-control" id="firstName" />
                     </div>
                     <div className="input-group mb-3">
                         <span className="input-group-text">Last Name</span>
@@ -53,11 +63,11 @@ export const AddEmployeeScreen = () => {
                     </div>
                     <div className="input-group mb-3">
                         <span className="input-group-text">Date of Birth</span>
-                        <input onChange={handleInputChange} type="text" className="form-control" id="dateOfBirth" />
+                        <input onChange={handleInputChange} type="date" className="form-control" id="dateOfBirth" />
                     </div>
                     <div className="input-group mb-3">
                         <span className="input-group-text"> Start Date</span>
-                        <input onChange={handleInputChange} type="text" className="form-control" id="startDate" />
+                        <input onChange={handleInputChange} type="date" className="form-control" id="startDate" />
                     </div>
 
                     <div className="address  mb-3">
@@ -72,8 +82,8 @@ export const AddEmployeeScreen = () => {
                         </div>
                         <div className="input-group mb-3">
                             <span className="input-group-text">State</span>
-                            {/* <input id="street" type="text" className="form-control" className="form-control" /> */}
                             <select onChange={handleInputChange} name="state" className="form-select" id="state">
+                                <option value={""}>select an option ...</option>
                                 {
                                     state.map((item, i) => <option key={i} value={item.abbreviation}>{item.name}</option>)
                                 }
@@ -101,7 +111,11 @@ export const AddEmployeeScreen = () => {
 
                 <button className='btn btn-primary' onClick={() => { saveEmployee() }}>Save</button>
             </div>
-            <div id="confirmation" className="modal">Employee Created!</div>
+
+            <Modal style={{ borderRadius: 20 }} onBackDropPress={() => { setIsVisible(() => !isVisible) }} isVisible={isVisible}>
+                <div className='close-btn' onClick={() => setIsVisible(() => !isVisible)}>x</div>
+                <p className='modal-msg'>Employee Created !</p>
+            </Modal>
         </div>
     )
 }

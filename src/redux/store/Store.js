@@ -3,10 +3,10 @@ import storage from 'redux-persist/lib/storage'
 import {combineReducers} from "redux"; 
 import { persistReducer } from 'redux-persist'
 import thunk from 'redux-thunk'
-import EmployeeReducer from '../reducers/EmployeeReducer';
+import employeeReducer from '../reducers/EmployeeReducer';
 
 const reducers = combineReducers({
-  user: EmployeeReducer
+  employees: employeeReducer
 });
 
 const persistConfig = {
