@@ -112,7 +112,7 @@ export const AddEmployeeScreen = () => {
                 <button className='btn btn-primary' onClick={() => { saveEmployee() }}>Save</button>
             </div>
 
-            <Modal style={{ borderRadius: 20 }} onBackDropPress={() => { setIsVisible(() => !isVisible) }} isVisible={isVisible}>
+            <Modal style={{ borderRadius: 20 }} isVisible={isVisible}>
                 <div className='close-btn' onClick={() => setIsVisible(() => !isVisible)}>x</div>
                 <p className='modal-msg'>Employee Created !</p>
             </Modal>
