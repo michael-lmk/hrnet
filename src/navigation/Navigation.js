@@ -15,8 +15,9 @@ const Navigation = () => {
             <Router>
 
                 <Routes>
-                    <Route path="/list" element={<ListEmployeeScreen />} />
                     <Route path="/add" element={<AddEmployeeScreen />} />
+                    <Route path="/list" element={<ListEmployeeScreen />} />
+                    <Route path="*" element={<ListEmployeeScreen />} />
                 </Routes>
 
             </Router>
